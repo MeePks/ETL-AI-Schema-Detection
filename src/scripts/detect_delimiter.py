@@ -68,9 +68,10 @@ def detect_record_separator(sample):
         except:
             return '\n'
         
-
+'''
 # Example usage
 path = r'Y:\Split\Retail\GiantEagle\ScanBack\2025-03-18\gescanback_20250318.dat.txt'
 line_number = 1  # Specify the line number to use for delimiter detection 
 df = read_sample_files(path, line_number)
 print(df.to_string(index=False))
+'''
