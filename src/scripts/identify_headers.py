@@ -18,7 +18,7 @@ def identify_headers(file_path, delimiter, has_header=True, header_line_number=N
     with open(file_path, 'r') as file:
         if has_header:
             if header_line_number is not None:
-                for _ in range(header_line_number):
+                for _ in range(header_line_number-1):
                     file.readline()  # Skip lines until the specified line
                 header_line = file.readline().strip()
             else:
@@ -30,4 +30,21 @@ def identify_headers(file_path, delimiter, has_header=True, header_line_number=N
             headers = [f'field{i+1}' for i in range(num_columns)]
         
         return headers
+
+# Function to process files in a directory or a single file
+def handle_path_for_headers(path, delimiter, has_header=True, header_line_number=None):
+    if os.path.isfile(path):
+        headers = identify_headers(path, delimiter, has_header, header_line_number)
+        return {os.path.basename(path): headers}
+    elif os.path.isdir(path):
+        headers_dict = {}
+        for file_name in os.listdir(path):
+            file_path = os.path.join(path, file_name)
+            headers = identify_headers(file_path, delimiter, has_header, header_line_number)
+            headers_dict[file_name] = headers
+        return headers_dict
+    else:
+        print(f"Invalid path: {path}")
+        return None
+
 
