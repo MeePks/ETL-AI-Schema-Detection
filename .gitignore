@@ -9,3 +9,4 @@ features/preprocessed_data.csv
 features/parsed_data.csv
 data/ 
 Datasets/
+models/
