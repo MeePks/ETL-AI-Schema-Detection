@@ -1,0 +1,8 @@
+column_name,predicted_data_type,max_length
+amount_float,float,6
+might_float,float,6
+decision_int,int,4
+society_date,date,12
+size_date,date,12
+factor_float,float,6
+wonder_varchar,varchar,14
