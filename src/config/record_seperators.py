@@ -17,4 +17,4 @@ def map_record_separator(separator):
     }
     return mapping.get(separator, separator)
 
-print(repr(map_record_separator("CRLF")))
+#print(repr(map_record_separator("CRLF")))
