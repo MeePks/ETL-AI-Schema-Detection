@@ -4,6 +4,7 @@ import sys
 from scripts.identify_headers import identify_headers,identify_number_of_columns
 from scripts.detect_delimiter import detect_delimiter_in_sample, detect_record_separator
 from scripts.generate_config_file import create_config_files
+from scripts.detect_data_type import predict_schema
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from config.record_seperators import map_record_separator
 
@@ -45,15 +46,23 @@ def process_file(file_path,has_header, line_number):
         num_of_columns=identify_number_of_columns(file_path, delimiter,line_number)
         columns_names=identify_headers(file_path, delimiter, has_header, line_number)
         
-        return {'FileName': os.path.basename(file_path), 'Delimiter': delimiter,
+        return {'FileName': os.path.abspath(file_path), 'Delimiter': delimiter,
                  'RecordSeparator': record_separator , 'NumOfColumns':num_of_columns, 'ColumnNames':columns_names}
     
 
 if __name__ == "__main__":
-    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\Datasets"
+    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\Datasets\PIPEDelimiter.txt"
     has_header = True
     header_line_number = 1
+    sampling_rate = 10000
     result_df = read_sample_files(path,has_header,header_line_number)
-    create_config_files(result_df,path)
+    for index,rows in result_df.iterrows():
+        print(f"File Name: {rows['FileName']}")
+        print(f"Delimiter: {rows['Delimiter']}")
+        print(f"Record Separator: {rows['RecordSeparator']}")
+        print(f"Number of Columns: {rows['NumOfColumns']}")
+        print(f"Column Names: {rows['ColumnNames']}")
+        predict_schema(rows['FileName'],rows['Delimiter'],sampling_rate, has_header)  
+
 
 
