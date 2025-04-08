@@ -168,6 +168,7 @@ def predict_schema(file_path,delimiter=",",nrows=1000,has_header=True):
 
     print("\nPrediction result:\n")
     print(result_df)
+    return result_df
 
 
 # --------------------------------
