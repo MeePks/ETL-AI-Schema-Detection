@@ -10,3 +10,4 @@ features/parsed_data.csv
 data/ 
 Datasets/
 src/models/
+config/
