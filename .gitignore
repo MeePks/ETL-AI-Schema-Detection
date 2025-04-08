@@ -1,0 +1,10 @@
+config.ini
+__pycache__/
+*.pyc
+.DS_Store
+*.twbr
+data/samples/
+features/engineered_features.csv
+features/preprocessed_data.csv
+features/parsed_data.csv
+data/ 
