@@ -101,11 +101,15 @@ def map_numeric_to_datatype(prediction):
 # --------------------------------
 # Step 2: Predict data types
 # --------------------------------
-def predict_schema(file_path,delimiter=",",nrows=1000):
-    print(f"Loading data from: {file_path}")
-    raw_df = pd.read_csv(file_path, delimiter=delimiter, nrows=10000)
+def predict_schema(file_path,delimiter=",",nrows=1000,has_header=True):
+    #print(f"Loading data from: {file_path}")
+    if has_header:
+        raw_df = pd.read_csv(file_path, delimiter=delimiter, nrows=10000)
+    else:
+        raw_df = pd.read_csv(file_path, delimiter=delimiter, header=None, nrows=10000)
+        raw_df.columns = [f"field{i+1}" for i in range(raw_df.shape[1])]
 
-    print(f"Extracting features from {len(raw_df.columns)} columns...")
+    #print(f"Extracting features from {len(raw_df.columns)} columns...")
     feature_rows = []
     raw_feature_data = []  # List to store raw features for each column
     for col in raw_df.columns:

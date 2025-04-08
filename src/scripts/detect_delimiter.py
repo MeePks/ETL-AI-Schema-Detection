@@ -45,7 +45,7 @@ def process_file(file_path, line_number):
 # Function to detect delimiter in sample text
 def detect_delimiter_in_sample(text):
     # Consider punctuation, whitespace, and common record separators as potential delimiters
-    potential_delimiters = string.punctuation.replace('"', '') + string.whitespace
+    potential_delimiters = string.punctuation.replace('"', '').replace('_','') + string.whitespace
     
     # Count occurrences of each character
     delimiter_counts = {char: text.count(char) for char in potential_delimiters}
