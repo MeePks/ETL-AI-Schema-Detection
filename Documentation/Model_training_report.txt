@@ -1,0 +1,64 @@
+ Loading data...
+✂️ Splitting features and labels...
+🔀 Splitting into train and test sets...
+🚂 Training initial Random Forest model...
+✅ Initial training done. Evaluating...
+📊 Classification Report:
+                     precision    recall  f1-score   support
+
+ -5.782060477825426       0.00      0.00      0.00      2006
+-1.2873436350322538       1.00      1.00      1.00    763058
+-0.3884002664736193       1.00      1.00      1.00    779425
+ 0.5105431020850151       1.00      1.00      1.00    740569
+ 1.4094864706436494       1.00      1.00      1.00    651457
+
+           accuracy                           1.00   2936515
+          macro avg       0.80      0.80      0.80   2936515
+       weighted avg       1.00      1.00      1.00   2936515
+
+✅ Accuracy: 0.9993168773188627
+🧾 Confusion Matrix:
+ [[     0   2006      0      0      0]
+ [     0 763058      0      0      0]
+ [     0      0 779425      0      0]
+ [     0      0      0 740569      0]
+ [     0      0      0      0 651457]]
+🎯 Starting hyperparameter tuning...
+Fitting 3 folds for each of 24 candidates, totalling 72 fits
+✅ Best Parameters: {'max_depth': None, 'min_samples_leaf': 1, 'min_samples_split': 2, 'n_estimators': 100}
+🧪 Evaluating tuned model...
+📊 Tuned Model Report:
+                     precision    recall  f1-score   support
+
+ -5.782060477825426       0.00      0.00      0.00      2006
+-1.2873436350322538       1.00      1.00      1.00    763058
+-0.3884002664736193       1.00      1.00      1.00    779425
+ 0.5105431020850151       1.00      1.00      1.00    740569
+ 1.4094864706436494       1.00      1.00      1.00    651457
+
+           accuracy                           1.00   2936515
+          macro avg       0.80      0.80      0.80   2936515
+       weighted avg       1.00      1.00      1.00   2936515
+
+✅ Accuracy: 0.9993168773188627
+💾 Saving model and label encoder...
+🎉 Model saved to: src/models\random_forest_classifier.pkl
+📚 Label encoder saved to: src/models\label_encoder.pkl
+PS Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
