@@ -1,24 +1,28 @@
-import pandas as pd
+import json
 import os
 
-def create_config_files(df, filepath):
-    """
-    This function accepts a DataFrame, prints its values, and writes each row to a separate Excel file.
+def generate_final_config_file(file_metadata_df, output_dir="config"):
+    os.makedirs(output_dir, exist_ok=True)
+    config_data = {
+        "file_name": file_metadata_df["FileName"],
+        "delimiter": file_metadata_df["Delimiter"],
+        "record_separator": file_metadata_df["RecordSeparator"],
+        "has_header": bool(file_metadata_df["HasHeader"]),
+        "columns": []
+    }
 
-    Parameters:
-    df (pd.DataFrame): The DataFrame containing the configuration data.
-    filepath (str): The base file path where the configuration files will be created.
-    """
-    for index, row in df.iterrows():
-        # Create a DataFrame for the current row
-        row_df = df.iloc[[index]].copy()
-        output_file = f'{filepath}/config/config_{os.path.splitext(row["FileName"])[0]}.xlsx'
-        output_directory = os.path.dirname(output_file)
+    for col, dtype, maxlen in zip(file_metadata_df["PredictedSchema"]["column_name"],
+                                    file_metadata_df["PredictedSchema"]["predicted_data_type"],
+                                    file_metadata_df["PredictedSchema"]["max_length"]):
+        column_config = {
+            "name": col,
+            "type": dtype,
+        }
+        if dtype == "varchar":
+            column_config["length"] = int(maxlen)
+        config_data["columns"].append(column_config)
 
-        # Create the directory if it doesn't exist
-        os.makedirs(output_directory, exist_ok=True)
-        print(f"Creating configuration file '{output_file}'...")
-
-        # Write the row DataFrame to Excel
-        row_df.to_excel(output_file, index=False)
-        print(f"Configuration file '{output_file}' has been created.")
+    output_path = os.path.join(output_dir, f"{os.path.basename(file_metadata_df['FileName'])}_config.json")
+    with open(output_path, "w") as f:
+        json.dump(config_data, f, indent=4)
+    print(f"Config saved: {output_path}")
