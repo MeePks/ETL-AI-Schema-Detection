@@ -57,7 +57,7 @@ def generate_final_config_file(file_metadata_df, output_dir="config"):
             column_config["length"] = int(maxlen)
         elif dtype == "float":
             column_config["length"] = int(maxlen)
-            column_config["precision"] = 4
+            column_config["scale"] = 2
         config_data["columns"].append(column_config)
 
     output_path = os.path.join(output_dir, f"{os.path.basename(file_metadata_df['FileName'])}_config.json")

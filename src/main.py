@@ -51,7 +51,7 @@ def process_file(file_path,has_header, line_number):
     
 
 if __name__ == "__main__":
-    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\data\test\Comma_DeLimited_491.txt"
+    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\data\raw"
     has_header = True
     header_line_number = 1
     sampling_rate = 10000
