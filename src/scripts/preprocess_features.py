@@ -60,4 +60,4 @@ df = remove_low_variance_columns(df)
 
 # Step 6: Save the preprocessed dataset
 df.to_csv("features/preprocessed_data.csv", index=False)
-print("✅ Data preprocessing complete. Preprocessed data saved as 'preprocessed_data.csv'.")
+print("Data preprocessing complete. Preprocessed data saved as 'preprocessed_data.csv'.")
