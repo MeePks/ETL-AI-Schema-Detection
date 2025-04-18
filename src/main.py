@@ -1,10 +1,13 @@
+import subprocess
 import pandas as pd
 import os
 import sys
+import json
 from scripts.identify_headers import identify_headers,identify_number_of_columns
 from scripts.detect_delimiter import detect_delimiter_in_sample, detect_record_separator
 from scripts.generate_config_file import generate_final_config_file
 from scripts.detect_data_type import predict_schema
+from scripts.create_table_load import create_connection, create_sql_table, load_data_to_sql
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from config.record_seperators import map_record_separator
 
@@ -51,10 +54,14 @@ def process_file(file_path,has_header, line_number):
     
 
 if __name__ == "__main__":
-    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\data\raw"
+    path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\data\raw\file_7.txt"
     has_header = True
     header_line_number = 1
-    sampling_rate = 10000
+    sampling_rate = 100
+    server = "DC-Carbon"
+    database = "AmazonDataLoad"
+    mode = "replace"
+
     result_df = read_sample_files(path,has_header,header_line_number)
     result_df["HasHeader"] = has_header
     result_df["PredictedSchema"] = None
@@ -68,7 +75,36 @@ if __name__ == "__main__":
         #print(f"Predicted Schema:\n{schema_df}")
         # Store the full result DataFrame (column_name, predicted_data_type, max_length)
         result_df.at[index, "PredictedSchema"] = schema_df
-        generate_final_config_file(result_df.loc[index])
+        config_data=generate_final_config_file(result_df.loc[index])
+        print(f"Config File Generated at : {config_data}")
+        print("Please Reveiew config file and confirm if it is correct")
+
+        notepadpp_path=r"C:\Program Files (x86)\Notepad++\notepad++.exe"
+        if os.path.exists(notepadpp_path):
+            subprocess.Popen([notepadpp_path, config_data])
+            print(f"Opened {config_data} in Notepad++")
+        else:
+            print("Notepad++ not found. Please check the path.")
+
+        input("Press Enter to continue...")
+
+        with open(config_data, 'r') as file:
+            config_data = json.load(file)
+        table_name = config_data["file_name"].split("\\")[-1].split(".")[0]
+        engine = create_connection(server, database)
+
+        # Create SQL table and load data
+        load_data_to_sql(
+        rows['FileName'], 
+        config_data,
+        table_name, 
+        engine, 
+        delimiter=config_data["delimiter"],
+        has_header=config_data["has_header"], 
+        start_row=0,
+        insert_chunksize=sampling_rate,
+        mode=mode)
+        
 
 
 

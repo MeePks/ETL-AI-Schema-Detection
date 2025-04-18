@@ -65,4 +65,5 @@ def generate_final_config_file(file_metadata_df, output_dir="config"):
         json.dump(config_data, f, indent=4)
     create_excel_file(config_data,output_path)
     print(f"Config saved: {output_path}")
+    return output_path
 
