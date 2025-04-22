@@ -1,0 +1,144 @@
+3.4.1 Synthesis of Data Generation by Using Python
+
+The enterprise automation in data generation process was achieved using a customized Python script which then generates 500 differed files in formats including .csv, .txt, and random format .dat. The script utilized faker library for the realistic simulation of data like names, dates, and strings while using the inbuilt random module to create variations in their structures and contents.
+
+Following core aspects from this data generation process are as follows:
+
+File Extensions and Delimiters: The files would be saved in varying format extensions (.csv, .txt, .dat) and randomly assigned the delimiters like commas ,, pipes |, semicolons ;, tabs \t, or carets ^ to simulate all the real differences evident in the real world.
+
+Schema Creation: A schema that was arbitrary was generated on the basis of random selection from 3 to 8 columns for each one of the files. These were given one of four possible SQL-compatible datatypes: int, float, varchar, or date.
+
+Head Generation: The column headers display the column name and its type to avoid misunderstanding and to facilitate later downstream usage.
+
+Row Filling: Each file would comprise from 1,000 to 10,000 records. The values created under each type were populated, and this is how:
+
+Integers: Random integers within a defined range.
+
+Floats: Random floating-point numbers that were formatted into two decimal points.
+
+Varchar: Random words through Faker.
+
+Dates: Realistic dates were randomly formatted under some typical random formats, for example, YYYY-MM-DD, DD/MM/YYYY, MM-DD-YYYY, or textual formats like Jan 01, 2021.
+
+With this process, size and diversity of structure and value can be largely ensured, thus simulating the real data variations during real-world data ingestion.
+
+3.4.2 Rationale for use of Synthetic Data
+The actual world datasets bring with them a multitude of challenges such as incomplete labels, compliance risks, and insufficient diversity in the structure. By producing data synthetically:
+
+Labels Controlled: Control over the labeling for supervised learning (column data types) has been inherently built into the logic of the schema generation.
+
+Replicable: The script can anytime be reused to generate fresh data with same or varied parameters.
+
+Balance and Coverage: Allowed for balance in all important data types avoid that problem of class imbalance.
+
+Real Noise and Variability: Random delimiters, data formats, and record lengths mimic the problems faced in practice in ETL scenarios.
+
+This is basically the result of such a process. Therefore, the initial dataset would be available here for the subsequent preprocessing, modeling, and even testing operations.
+
+3.4.3 Data Structure and Formats
+The synthetically generated data were intended to emulate real-world situations with structural and format variability for the better generalizability of the model. Each file created through the data collection process is structured according to certain specifications, which include:
+
+File Structure
+Header Row: The first line of every file contains column headers that include descriptive names along with embedded type labels, such as, price_float, dateOfBirth_date, or name_varchar. They were particularly important for supervised learning and downstream schema extraction.
+
+Data Rows: The lines below have data entries corresponding to the declared data types. Each file has a record count of between 1,000 and 10,000 for both scale and variety of the dataset.
+
+File Formats
+To represent the true diversity in data ingestion pipelines, the files were generated in three of the most commonly experienced formats:
+
+Comma-Separated Values (.csv)
+
+Text Files (.txt) with varying delimiters
+
+Data Files (.dat) with custom delimiters
+
+Delimiters
+The files used one of the following delimiters:
+
+Comma (,)
+
+Pipe (|)
+
+Semicolon (;)
+
+Tab (\t)
+
+Caret (^)
+
+The choice of delimiters was randomized to simulate the inconsistencies that are often part of foreign data sources.
+
+Data Types and Formats
+The four most important data types actually represented in the dataset are as follows:
+
+Integer (int) – whole numbers within 1 and 10,000 range
+
+Float (float) – numbers with a decimal digit precision of 2 places
+
+Varchar (varchar) – random text values produced using the Faker library
+
+Date (date) – realistic dates in a randomly selected format that include e.g.
+
+ISO Format: YYYY-MM-DD (e.g. 2021-04-22)
+
+European Format: DD/MM/YYYY (e.g. 22/04/2021)
+
+US Format: MM-DD-YYYY (e.g. 04-22-2021)
+
+Long Text Format: Month DD, YYYY (e.g., Apr 22, 2021)
+
+This comprehensive and flexible data structure permits rigorous preprocessing, model training, and evaluation while mimicking the inconsistencies of actual file formats.
+
+3.5 Data Preprocessing and Model Training
+In order to develop a dependable, discerning machine learning model for accurate statement evidence of delimiter-separated text files with SQL Server compatible column data types, a lot of order processing had to occur before the model training state began. Success in supervised machine learning models often depends on factors such as input features, so there was much care for the standardization that even synthetic and variably structured inputs undergo to clean them up in a meaningful state for the model to work well with them. Normalized data patterns were also defined during these tasks and deleted inconsistencies from its columns to derive features that could serve as semantic data types descriptive representation best. Only after proper conditioning did the data reach the feeding point for the chosen randomly trained, robust, and interpretable classifier-the Random Forest. This section goes into detail about the whole data pre-process pipeline followed in training and validating the classifier tailored entirely for the needs and technical scope within this research project.
+3.5.1 Data Preprocessing 
+To establish the relevance and integrity of the machine learning model for SQL Server-compliant column data-type recognition, it instituted a systematic multi-staged data preprocessing flow. This stage was critical in transitive raw synthetic datasets into structured numerical features that can be optimally consumed by a machine learning algorithm. Within the pre-processing pipeline, there were three major scripts: parse_for_training.py, feature_engineering.py, preprocess_feature.py, each having a distinct crucial role in transforming the raw data into analyzable clear-cut features.
+
+a) Parsing and Label Extraction (parse_for_training.py)
+Now, the first script of pipeline was parsing the raw synthetic files (CSV, TXT, or DAT formats) created at earlier sessions for putting in a structured tabular format the content of these files. The files were synthetically created with column names formatting that embed data type labels (for example, id_int, price_float, created_date). The script will automatically detect file delimiters using Python's built-in csv.Sniffer() utility and read each file line by line.
+
+From each file, it gets:
+
+Values from every cell.
+
+It gets labels from column headers by splitting using an underscore and taking the last token, which is presumed to represent the data type.
+
+Includes metadata, like source file and column index.
+
+Each extracted data point was saved uniformly in an architecture having four fields: value, label, source_file, and column_index. The compiled data from all 500 generated files was then written to features/parsed_data.csv as a final parsed dataset. This structured output, in turn, serves as the source for the feature extraction process.
+
+b) Feature Engineering (feature_engineering.py) 
+Once the data points along with their labels were extracted, thus the next step was to convert the raw string values into quantitative features. This was done using the feature_engineering.py script, which read parsed_data.csv and applied a custom feature extraction function on each value.
+
+The feature engineering logic relied mostly on identifying statistical and structural characteristics of the value, such as:
+
+The value's length.
+
+The number of digits, letters, and special characters.
+
+The presence of alphabetic characters, digits, and date-specific separators, such as slashes or dashes.
+
+Typecast ability to float or integer.
+
+Number of tokens separated by whitespaces.
+
+Uppercase content detection.
+
+The script was made high performance using ProcessPoolExecutor for batch-wise parallel processing, which allows for scalability. It processed batches of 100,000 rows simultaneously, enabling a drastic reduction in execution time for larger datasets. The engineered features and original label were saved to features/engineered_features.csv.
+
+c) Feature Cleaning and Transformation (preprocess_feature.py)
+The last step of preprocessing was done using preprocess_feature.py, which carried out cleaning and transforming engineered features to ready them for model training. The following procedures were followed:
+
+Missing Value Imputation: All absent or NaNs were filled up by most frequent strategy to avoid losing the information.
+
+Categorical Encoding: Remaining categorical string values which could not be transformed to a number were then transformed into numbers through Label Encoding so that the algorithm could interpret categorical data.
+
+Outlier Detection and Removal: It has applied Isolation Forest algorithm on numerical features to detect and remove abnormal data points.
+
+Feature Scaling: All numerical features were standardized by Default as it is, to common scale metrics.
+
+Low Variance Filter: Removal of zero variance features (i.e., all same values across records) thus preventing noise and redundancy.
+
+The final preprocessed dataset was saved in features/preprocessed_data.csv after completing all transformations so that it could be directly used as input to train a model.
+
+
+
