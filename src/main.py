@@ -57,7 +57,7 @@ if __name__ == "__main__":
     path = r"Y:\Data\Retail\WalmartMX\Development\Pikesh.Maharjan\ETL-AI-Schema-Detection\data\raw\file_7.txt"
     has_header = True
     header_line_number = 1
-    sampling_rate = 100
+    sampling_rate = 300
     server = "DC-Carbon"
     database = "AmazonDataLoad"
     mode = "replace"
